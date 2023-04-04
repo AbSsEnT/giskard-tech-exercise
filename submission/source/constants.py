@@ -23,4 +23,35 @@ COLUMN_TYPES = {
     'job': "category",
     'people_under_maintenance': "numeric",
     'telephone': "category",
-    'foreign_worker': "category"}
+    'foreign_worker': "category"
+}
+
+CONTINUOUS_FEATURES = [
+    'credit_amount',
+    'installment_as_income_perc'
+]
+
+DISCRETE_FEATURES = [
+    'duration_in_month',
+    'present_residence_since',
+    'age',
+    'credits_this_bank',
+    'people_under_maintenance',
+]
+
+CATEGORICAL_FEATURES = [
+    'account_check_status',
+    'credit_history',
+    'purpose',
+    'savings',
+    'present_employment_since',
+    'sex',
+    'personal_status',
+    'other_debtors',
+    'property',
+    'other_installment_plans',
+    'housing',
+    'job',
+    'telephone',
+    'foreign_worker'
+]
