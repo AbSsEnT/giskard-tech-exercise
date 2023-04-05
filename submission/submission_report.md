@@ -72,13 +72,13 @@ Simple approach, which randomly clones observations from minority class.
 
 ![random_oversampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Frandom_oversampling_confusion_matrix.png)
 
-As we can see, we were able to increase all possible metrics, including test and cross-validation. On the confusion matrix 
+As we can see, all metrics increased, including test and cross-validation. On the confusion matrix 
 it is notable, that TN number decreased, although model performance increased. That is, because we are optimizing model performance
 on all classes, not only on class 1 ("Not default").
 
 #### SMOTE
 This approach is known as a 'standard' for over-sampling techniques, because of its simplicity and reasonable performance.
-To generate new samples, two points from minority class are selected, then the new point selected, which lies on the line
+To generate new samples, two points from minority class are selected, then the new point is selected, which lies on the line
 between these two points.
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
@@ -106,9 +106,9 @@ points, whose neighbourhood has a lot of points from another class, thus negativ
 
 #### SMOTE-NC
 There is one important point to be considered, when using SMOTE and ADASYN. If dataset contains categorical features or 
-numerical, but discrete, than these two method can generate non-reasonable samples. For example, if we draw a point between 
-samples, where feature 'age' has values 47 and 48, it is real to get feature 47.34 for the new point, which makes no sense.
-Thus post-processing is needed to transform such features or it is possible to use over-sampling methods, which handle categorical 
+numerical-discrete, then these two methods can generate non-reasonable samples. For example, if we draw a point between 
+samples, where feature 'age' has values 47 and 48, it is possible to get feature 47.34 for the new point, which makes no sense.
+Thus post-processing is needed to transform such features, or it is possible to use over-sampling methods, which handle categorical 
 and discrete features. One of these methods is SMOTE-NC, which for categorical features picks the most frequent values across
 its neighbourhood.
 
@@ -120,17 +120,17 @@ its neighbourhood.
 
 In terms of Cross-Validation F1, we got result, comparable with previous methods, but metrics on the test dataset are worse.
 Truly speaking, during experiments, it was usual, when two different configurations of hyperparameters brought similar
-cross-validation score, but very different test scores. I suppose, this is due to small data-set size, which makes non-averaged
+cross-validation score, but very different test scores. I suppose, this is due to the small data-set size, which makes non-averaged
 test score very unstable. This is one of the reasons, why I decided to focus much more on cross-validation F1.
 
 
 ### Under-sampling methods
-Next set of algorithms aims to remove samples from majority class. Advantage of these methods are that they mostly work with
+The next set of algorithms aims to remove samples from majority class. Advantage of these methods are that they mostly work with
 categorical features, although the main disadvantage is that we can remove useful information from the dataset, especially 
-during small-data regime.
+having small-data regime.
 
 #### Random Under-Sampling
-Consider opposite to the Random Over-Sampling method, which in contrast, randomly removes samples from majority class.
+Consider opposite to the Random Over-Sampling method, which in contrast, randomly removes samples from the majority class.
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
 |----------|-------|-------|---------------|
@@ -142,7 +142,7 @@ In terms of cross-validation F1, this resampler brought worse model, than previo
 test balanced accuracy is better than all but one, obtained with the SMOTE.
 
 #### Instance Hardness Threshold
-Other method to consider is Instance Hardness Threshold. This algorithm first trains a classifier, and then filters samples,
+Other method to consider is the Instance Hardness Threshold. This algorithm first trains a classifier, and then filters samples,
 with low probabilities. Thus, it is possible to reduce noisy samples near decision boundary and those, which are far from 
 decision boundary, but on the incorrect side (possible outliers). Disadvantage could be the fact, that developer needs to
 additionally fine-tune classifier.
@@ -156,7 +156,8 @@ This method did not bring notable performance increase, nor decrease across othe
 ### Custom Over-Sampling
 Finally, I decided to take into account model performance on specific data slices, specifically on those, where model under-performed.
 I decided to use quite straightforward approach, which turned out to be very effective. It is consisted of two steps. First, 
-random oversampling, mostly, but not only on minority class was performed. We oversampled those data-slices, which the model under-performs on. On the second step SMOTE-NC was used.
+random oversampling, mostly, but not only on minority class is performed. Those data-slices are over-sampled, which the model under-performs on. 
+On the second step SMOTE-NC is used.
 
 To define 'hard' data-slices, I used a mixture of heuristics:
 - Feature importance (contribution), discovered through Giskard Inspector;
