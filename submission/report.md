@@ -179,10 +179,10 @@ turned out to be the best. Specifically, Cross-Validation F1 increased significa
 test metrics are also the highest (although, they are equal to the SMOTE metrics).  
 I defined next features and related values, which were oversampled to reduce the number of incorrect predictions:
 
-| account_check_status | credit_history                          | personal_status | savings      |
-|----------------------|-----------------------------------------|-----------------|--------------|
-| 0 <= ... < 200 DM    | all credits at this bank paid back duly | divorced        | ... < 100 DM |
-| < 0 DM               |                                         |                 |              |
+| account_check_status | personal_status |
+|----------------------|-----------------|
+| 0 <= ... < 200 DM    | divorced        |
+| < 0 DM               |                 |
 
 What should be noted, is the fact, that this approach takes into account most problem requirements:
 - Focus on features, which model under-performs on;

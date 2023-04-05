@@ -47,7 +47,7 @@ Attributes
 
 Baseline confusion matrix
 ~~~~
-.. image:: docs/images/baseline_confusion_matrix.png
+.. image:: docs/images/confusion_matrices/baseline_confusion_matrix.png
   :width: 600
   
 
