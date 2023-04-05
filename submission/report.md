@@ -52,7 +52,7 @@ For cross-validation, I used 10 splits with 10 repeats.
 |----------|-------|-------|---------------|
 | 0.675    | 0.755 | 0.698 | 0.692         |
 
-![baseline_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Fbaseline_confusion_matrix.png)  
+![baseline_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fbaseline_confusion_matrix.png)  
 
 As we can see, model performs better on samples with label 1 "Not default" and it is natural, because it makes up 70% of 
 labels distribution. Thus, the task will be to balance the number of both classes to let model perform equally on observations 
@@ -70,22 +70,22 @@ Simple approach, which randomly clones observations from minority class.
 |----------|-------|-------|---------------|
 | 0.689    | 0.755 | 0.712 | 0.715         |
 
-![random_oversampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Frandom_oversampling_confusion_matrix.png)
+![random_oversampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Frandom_oversampling_confusion_matrix.png)
 
 As we can see, we were able to increase all possible metrics, including test and cross-validation. On the confusion matrix 
-it is notable, that TN number decreased, although model performance increased. That is, because we optimizing model performance
-on all classes, not only on class 1 "Not default".
+it is notable, that TN number decreased, although model performance increased. That is, because we are optimizing model performance
+on all classes, not only on class 1 ("Not default").
 
 #### SMOTE
 This approach is known as a 'standard' for over-sampling techniques, because of its simplicity and reasonable performance.
-To generate new samples, two points from minority class are selected, than the new point selected, which belongs to the line
+To generate new samples, two points from minority class are selected, then the new point selected, which lies on the line
 between these two points.
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
 |----------|-------|-------|---------------|
 | 0.688    | 0.740 | 0.718 | 0.748         |
 
-![smote_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Fsmote_confusion_matrix.png)
+![smote_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fsmote_confusion_matrix.png)
 
 We got Cross-Validation F1 score quite similar to the one with previous method, but metrics on test set are reasonably better.
 
@@ -100,46 +100,46 @@ between 'hard' and 'easy' samples.
 
 As we can see, obtained results are worse, than the one, obtained with SMOTE. One of possible reasons, could be that by 
 generating more 'hard' samples, which will be located near decision boundary, ADASYN enriches dataset with outliers, i.e. 
-points which neighbourhood has a lot of points from another class, thus negatively impacting the building of regression's decision boundary.     
+points, whose neighbourhood has a lot of points from another class, thus negatively impacting the building of regression's decision boundary.     
 
-![adasyn_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Fadasyn_confusion_matrix.png)
+![adasyn_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fadasyn_confusion_matrix.png)
 
 #### SMOTE-NC
 There is one important point to be considered, when using SMOTE and ADASYN. If dataset contains categorical features or 
 numerical, but discrete, than these two method can generate non-reasonable samples. For example, if we draw a point between 
-sampled, where feature 'age' has values 47 and 48, it is easy to get feature 47.34 for the new point, which makes no sense.
+samples, where feature 'age' has values 47 and 48, it is real to get feature 47.34 for the new point, which makes no sense.
 Thus post-processing is needed to transform such features or it is possible to use over-sampling methods, which handle categorical 
 and discrete features. One of these methods is SMOTE-NC, which for categorical features picks the most frequent values across
-neighbourhood.
+its neighbourhood.
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
 |----------|-------|-------|---------------|
 | 0.688    | 0.730 | 0.697 | 0.712         |
 
-![smotenc_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Fsmotenc_confusion_matrix.png)
+![smotenc_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fsmotenc_confusion_matrix.png)
 
 In terms of Cross-Validation F1, we got result, comparable with previous methods, but metrics on the test dataset are worse.
-Truly speaking, during experiments, it was very often, when two different configurations of hyperparameters brought similar
+Truly speaking, during experiments, it was usual, when two different configurations of hyperparameters brought similar
 cross-validation score, but very different test scores. I suppose, this is due to small data-set size, which makes non-averaged
-test score very unstable. This is one of the reasons, why I decided to focus much more cross-validation F1.
+test score very unstable. This is one of the reasons, why I decided to focus much more on cross-validation F1.
 
 
 ### Under-sampling methods
 Next set of algorithms aims to remove samples from majority class. Advantage of these methods are that they mostly work with
 categorical features, although the main disadvantage is that we can remove useful information from the dataset, especially 
-during low-data regime.
+during small-data regime.
 
 #### Random Under-Sampling
-Consider opposite to the Random Over-Sampling method, which in contrast, remove randomly samples from majority class.
+Consider opposite to the Random Over-Sampling method, which in contrast, randomly removes samples from majority class.
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
 |----------|-------|-------|---------------|
 | 0.685    | 0.720 | 0.698 | 0.729         |
 
-![random_undersampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fperformace%2Frandom_undersampling_confusion_matrix.png)
+![random_undersampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Frandom_undersampling_confusion_matrix.png)
 
 In terms of cross-validation F1, this resampler brought worse model, than previous over-sampling methods, but, surprisingly, 
-test balanced accuracy is better than all but, obtained with the SMOTE.
+test balanced accuracy is better than all but one, obtained with the SMOTE.
 
 #### Instance Hardness Threshold
 Other method to consider is Instance Hardness Threshold. This algorithm first trains a classifier, and then filters samples,
@@ -154,24 +154,25 @@ additionally fine-tune classifier.
 This method did not bring notable performance increase, nor decrease across other methods.
 
 ### Custom Over-Sampling
-Finally, I decided to take into account model performance on specific data slices, specifically on those, where model under-performs.
-I decided to use quite straightforward approach, which turned out to be very effective. It consisted of two steps. First, 
-random oversampling, mostly, but not only on minority class was performed. We oversampled those data-slices, which we defined 
-the model under-performs on. On the second step SMOTE-NC was used.
+Finally, I decided to take into account model performance on specific data slices, specifically on those, where model under-performed.
+I decided to use quite straightforward approach, which turned out to be very effective. It is consisted of two steps. First, 
+random oversampling, mostly, but not only on minority class was performed. We oversampled those data-slices, which the model under-performs on. On the second step SMOTE-NC was used.
 
-To define under-performing data-slices, I used the mix of next heuristics:
+To define 'hard' data-slices, I used a mixture of heuristics:
 - Feature importance (contribution), discovered through Giskard Inspector;
 
-![giskard_inspector.png](..%2Fdocs%2Fimages%2Fperformace%2Fgiskard_inspector.png)
+![giskard_inspector.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fgiskard_inspector.png)
 
-- Analysis of features distribution on correct and misclassified samples. Specifically those features were chosen, where 
-proportion of correct and misclassified sampled was more than ~50% or the number of incorrect sampled was higher than 20.
+- Analysis of features distribution on correct and misclassified samples. Those features were chosen, where 
+proportion of correct and misclassified observations was more than ~50% or the number of incorrect points was higher than 20.
 
-- ![baseline_errors_distributions_categoricals_common_norm_trunc.png](..%2Fdocs%2Fimages%2Fcategoricals%2Fbaseline_errors_distributions_categoricals_common_norm_trunc.png)
+![baseline_errors_distributions_categoricals_common_norm_trunc.png](..%2Fdocs%2Fimages%2Fcategoricals%2Fbaseline_errors_distributions_categoricals_common_norm_trunc.png)
 
 | Cross F1 | Acc.  | F1    | Balanced Acc. |
 |----------|-------|-------|---------------|
 | 0.697    | 0.740 | 0.718 | 0.748         |
+
+![custom_oversampling_confusion_matrix.png](..%2Fdocs%2Fimages%2Fconfusion_matrices%2Fcustom_oversampling_confusion_matrix.png)
 
 Eventually, this algorithm turned out to be the best. All metrics, except standard accuracy (which is not important), 
 turned out to be the best. Specifically, Cross-Validation F1 increased significantly comparing to previous methods. Also 
@@ -183,13 +184,13 @@ I defined next features and related values, which were oversampled to reduce the
 | 0 <= ... < 200 DM    | all credits at this bank paid back duly | divorced        | ... < 100 DM |
 | < 0 DM               |                                         |                 |              |
 
-What should be noted, is the fact, that this approach takes into account problem requirements:
+What should be noted, is the fact, that this approach takes into account most problem requirements:
 - Focus on features, which model under-performs on;
 - Does not create data-bias during over-sampling process, because generated samples are drawn from real distribution, i.e. categorical features does not have continuous values;
 - Model was not over-fitted on the test set, because hyperparameters selection was performed using repeated-cross-validation.
 
 ## Conclusion
-This report provides an overview of the given problem, data and results of performed experiments with the data augmentation.  
+This report provides an overview of the given problem, dataset and results of performed experiments with the data augmentation.  
 All requirements have been met:
 - Higher score was obtained using only data-augmentation preprocessing step;
 - Proposed more than 2 data augmentation techniques;
@@ -200,7 +201,8 @@ All requirements have been met:
 ## Possible improvements
 1) Variational auto-encoder to sample observations which are close in latent spase to misclassified points;
 2) Use more granular oversampling ratio in custom oversampling, i.e. use specific oversampling ratio for each feature value.
-3) Develop automated heuristic to highlight 'bad' feature values.
+3) Develop automated heuristic to distill 'bad' feature values;
+4) Use more feature values, which model under-performs on.
 
 ------------------------------------
 Author: Mykyta Alekseiev, 05.04.2023
