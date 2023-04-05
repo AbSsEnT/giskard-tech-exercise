@@ -1,6 +1,8 @@
 # ====Constants====
 DATA_SOURCE_URL = "https://raw.githubusercontent.com/Giskard-AI/examples/main/datasets/credit_scoring_classification_model_dataset/german_credit_prepared.csv"
 
+GISKARD_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInRva2VuX3R5cGUiOiJBUEkiLCJhdXRoIjoiUk9MRV9BRE1JTiIsImV4cCI6MTY4ODA2MDkxMn0.a50g7gWXxLQaf8Jatqjw_UO1hJCLUXYJK_10wowv6mE"
+
 COLUMN_TYPES = {
     'default': "category",
     'account_check_status': "category",
