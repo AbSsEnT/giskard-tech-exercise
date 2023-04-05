@@ -1,3 +1,5 @@
+"""Module with helper functions used in submission.ipynb and eda.ipynb."""
+
 from typing import Iterable
 
 import numpy as np
@@ -5,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report
-from sklearn.model_selection import RepeatedStratifiedKFold, GridSearchCV, cross_val_score
+from sklearn.model_selection import RepeatedStratifiedKFold, GridSearchCV, cross_val_score, RandomizedSearchCV
 
 from .constants import DATA_SOURCE_URL
 
@@ -57,6 +59,18 @@ def cross_validation_grid_search(pipeline: Pipeline, params_grid: dict, X: Itera
     """Perform grid-search repeated-cross validation to get the best hyperparameters."""
     folds_generator = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=0)
     searcher = GridSearchCV(pipeline, params_grid, cv=folds_generator, scoring="f1_macro", refit=False, n_jobs=-1)
+    searcher.fit(X, Y)
+
+    print(f"Best params: {searcher.best_params_}")
+    print(f"Best F1-macro score: {searcher.best_score_: .3f}")
+
+
+def cross_validation_random_search(pipeline: Pipeline, params_grid: dict, X: Iterable, Y: Iterable,
+                                   **kwargs: dict) -> None:
+    """Perform random-search repeated-cross validation to get the best hyperparameters."""
+    folds_generator = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=0)
+    searcher = RandomizedSearchCV(pipeline, params_grid, cv=folds_generator, scoring="f1_macro", refit=False, n_jobs=-1,
+                                  n_iter=kwargs["n_iter"])
     searcher.fit(X, Y)
 
     print(f"Best params: {searcher.best_params_}")
